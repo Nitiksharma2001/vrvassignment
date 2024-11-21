@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Modal from '../../components/modal'
 import Navbar from '../../components/navbar'
-import usersData from '../../data/users.json'
+
 import TableRow from './tableRow'
 import { GlobalContext } from '../../context/context'
 
@@ -32,12 +32,16 @@ export default function AdminMain() {
     if (users) {
       setUsers(JSON.parse(users))
     } else {
-      usersData.map((user) => {
-        return {
-          ...user,
-          permissions: ['none'],
-        }
-      })
+      fetch('https://dummyjson.com/users')
+        .then((res) => res.json())
+        .then((data) =>
+          setUsers(data.users.map((user) => {
+            return {
+              ...user,
+              permissions: ['none'],
+            }
+          }))
+        )
     }
   }, [])
   return (
